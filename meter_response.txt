@@ -1,0 +1,12 @@
+<Response [200]>
+<Response [200]>
+<Response [200]>
+<Response [200]>
+{"invalid":false,"name":"IMAM MALIK MASJID  ","address":"BEHIND UP HILL TRANSFORMER Und St. Jigo"}
+{"invalid":false,"name":"IMAM MALIK MASJID  ","address":"BEHIND UP HILL TRANSFORMER Und St. Jigo"}
+{"invalid":false,"name":"IMAM MALIK MASJID  ","address":"BEHIND UP HILL TRANSFORMER Und St. Jigo"}
+{"invalid":false,"name":"IMAM MALIK MASJID  ","address":"BEHIND UP HILL TRANSFORMER Und St. Jigo"}
+{"invalid":true,"name":"INVALID METER NUMBER","address":"INVALID METER NUMBER"}
+{"invalid":true,"name":"INVALID METER NUMBER","address":"INVALID METER NUMBER"}
+{"invalid":false,"name":"IMAM MALIK MASJID  ","address":"BEHIND UP HILL TRANSFORMER Und St. Jigo"}
+{"invalid":false,"name":"IMAM MALIK MASJID  ","address":"BEHIND UP HILL TRANSFORMER Und St. Jigo"}

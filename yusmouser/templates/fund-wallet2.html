@@ -1,0 +1,26 @@
+{% extends 'home.html' %}
+  {% load static %}
+  {% block head %}
+  {{ block.super }}
+  {% endblock head %}
+  {% block content %}
+ <div class="card o-hidden border-0 shadow-lg my-5">
+  <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="p-5">
+                  <h1> {{ wallet_response }}</h1>
+                  <p>Return to <a href="/">dashboard</a> or</p>
+                  <p><a href="{% url 'yusmouser:fund_wallet' %}">Fund Wallet</a></p>
+                </div>
+              </div>
+            </div>
+  </div>
+</div>
+{% block script %}
+  {{ block.super }}
+  <script src="{% static 'js/buydata.js' %}"></script>
+{% endblock script %}
+
+{% endblock content %}

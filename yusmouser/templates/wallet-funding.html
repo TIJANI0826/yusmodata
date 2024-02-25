@@ -1,0 +1,52 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block content %}
+  <div class="container fluid">
+  <h1 class="mt-4">Wallet Transaction </h1>
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Wallet Transaction</h6>
+      </div>
+      <div class="card-body">
+          <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                      <tr>
+                      <th>Customer</th>
+                      <th>Transaction ID</th>
+                      <th>ident</th>
+                      <th>Status</th>
+                      <th>Number</th>
+                  </tr>
+              </thead>
+              <tfoot>
+                  <tr>
+                      <th>Customer</th>
+                      <th>Transaction ID</th>
+                      <th>ident</th>
+                      <th>Status</th>
+                      <th>Number</th>
+                  </tr>
+              </tfoot>
+              <tbody>
+                {% for customer in customersTransaction %}
+                  <tr>
+                      <th>{{ customer.customer}}</th>
+                      <th>{{ customer.transaction_id }}</th>
+                      <th>{{ customer.ident }}</th>
+                      <th>{{ customer.status }}</th>
+                      <th>{{ customer.mobile_number }}</th>
+                  </tr>
+                {% endfor %}
+              </tbody>
+    </table>
+</div>
+{% block script %}
+{{ block.super }}
+<script src="{% static 'js/scripts.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+<script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+{% endblock script %}
+{% endblock content %}

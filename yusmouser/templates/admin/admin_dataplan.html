@@ -1,0 +1,302 @@
+{% extends 'admin/admin_dashboard.html' %}
+{% load static %}
+{% block content %}
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Data Plan</h6>
+        <button class="m-0 btn btn-primary" type="button" class="btn btn-primary" onclick="openModal()" ><i class="fa-solid fa-plus" id="add_data_plan"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Data ID</th>
+                <th>Network</th>
+                <th>Plan Type</th>
+                <th>Amount</th>
+                <th>Size</th>
+                <th>Validity</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for data_plan in data_plans %}
+              <tr id=id{{ data_plan.id }}{{ data_plan.data_id }} data-id={{ data_plan.id }} data-dataid={{ data_plan.data_id }} data-network={{ data_plan.network }} data-plantype={{ data_plan.plan_type }} data-amount={{ data_plan.amount }} data-size={{ data_plan.size }} data-validity={{ data_plan.validity }} ">
+                <td id='idid{{ data_plan.id }}{{ data_plan.data_id }}' >{{ data_plan.id }}</td>
+                <td id='dataidid{{ data_plan.id }}{{ data_plan.data_id }}' >{{ data_plan.data_id }}</td>
+                <td id='networkid{{ data_plan.id }}{{ data_plan.data_id }}' >{{ data_plan.network }}</td>
+                <td id='plantypeid{{ data_plan.id }}{{ data_plan.data_id }}' >{{ data_plan.plan_type }}</td>
+                <td id='amountid{{ data_plan.id }}{{ data_plan.data_id }}' >{{ data_plan.amount }}</td>
+                <td id='sizeid{{ data_plan.id }}{{ data_plan.data_id }}'>{{ data_plan.size }}</td>
+                <td id='validityid{{ data_plan.id }}{{ data_plan.data_id }}'>{{ data_plan.validity }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="itemModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Update Data Plan</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body">
+            <form>
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="modal-id">ID</label>
+                  <input type="text" class="form-control" id="modal-id" readonly >
+              </div>
+              <div class="form-group">
+                <label for="modal-dataid">DATA ID</label>
+                  <input type="text" class="form-control" id="modal-dataid" >
+              </div>
+              <div class="form-group">
+                <label for="modal-network">NETWORK</label>
+                  <input type="text" class="form-control" id="modal-network" >
+              </div><div class="form-group">
+                <label for="modal-plantype">PLAN TYPE</label>
+                  <input type="text" class="form-control" id="modal-plantype" >
+              </div>
+              <div class="form-group">
+                <label for="modal-amount">AMOUNT</label>
+                  <input type="text" class="form-control" id="modal-amount" >
+              </div>
+              <div class="form-group">
+                <label for="modal-size">SIZE</label>
+                  <input type="text" class="form-control" id="modal-size" >
+              </div>
+              <div class="form-group">
+                <label for="modal-validity">VALIDITY</label>
+                  <input type="text" class="form-control" id="modal-validity" >
+              </div>
+
+            </form>
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" 
+ onclick=updateDataPlan() id="modal_update_button">Update</button>
+            <button type="button" class="btn btn-danger" id="modal_delete_button" onclick="deleteDataPlan()">Delete</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="modal_close_button">Close</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="addModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Create New Data Plan</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body">
+            <form>
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="modal-new-dataid">DATA ID</label>
+                  <input type="text" class="form-control" id="modal-new-dataid" >
+              </div>
+              <div class="form-group">
+                <label for="modal-new-network">NETWORK</label>
+                  <input type="text" class="form-control" id="modal-new-network" >
+              </div><div class="form-group">
+                <label for="modal-new-plantype">PLAN TYPE</label>
+                  <input type="text" class="form-control" id="modal-new-plantype" >
+              </div>
+              <div class="form-group">
+                <label for="modal-new-amount">AMOUNT</label>
+                  <input type="text" class="form-control" id="modal-new-amount" >
+              </div>
+              <div class="form-group">
+                <label for="modal-new-size">SIZE</label>
+                  <input type="text" class="form-control" id="modal-new-size" >
+              </div>
+              <div class="form-group">
+                <label for="modal-new-validity">VALIDITY</label>
+                  <input type="text" class="form-control" id="modal-new-validity" >
+              </div>
+
+            </form>
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" 
+    onclick=createDataPlan() id="modal_create_button">Create New Plan</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="modal_close_new_button">Close</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+{% block script %}
+{{ block.super }}
+<script>
+    
+  $('#dataTable').on('click', function(e){
+  var rowId = $(e.target).closest('tr').attr('id');
+  console.log(rowId)
+    $('#itemModal').modal('show');
+      var id = $(`#id${rowId}`).text();
+      var dataid = $(`#dataid${rowId}`).text();
+      var network = $(`#network${rowId}`).text();
+      var plantype = $(`#plantype${rowId}`).text();
+      var amount = $(`#amount${rowId}`).text();
+      var size = $(`#size${rowId}`).text();
+      var validity = $(`#validity${rowId}`).text();
+      console.log(id);
+      // Set modal input values
+      $('#modal-id').val(id);
+      $('#modal-dataid').val(dataid);
+      $('#modal-network').val(network);
+      $('#modal-plantype').val(plantype);
+      $('#modal-amount').val(amount);
+      $('#modal-size').val(size);
+      $('#modal-validity').val(validity);
+  })
+   
+    function openModal() {
+        $('#addModal').modal('show');
+    }
+</script>
+<script>
+  function createDataPlan(){
+    var csrftoken = document.getElementsByName('csrfmiddlewaretoken')[0].value
+    var data_id = $('#modal-new-dataid').val();
+    var network = $('#modal-new-network').val();
+    var plan_type = $('#modal-new-plantype').val();
+    var amount = $('#modal-new-amount').val();
+    var size = $('#modal-new-size').val();
+    var validity = $('#modal-new-validity').val();
+    
+    var request = new XMLHttpRequest();
+
+      request.open('POST', `https://yusmodata.tjib.repl.co/data/`);
+
+      request.setRequestHeader('Content-Type', 'application/json');
+      request.setRequestHeader('Access-Control-Allow-Origin', "*");
+      request.setRequestHeader('Access-Control-Allow-Methods', 'POST');
+      request.setRequestHeader("Access-Control-Allow-Headers", "accept, content-type");
+      request.setRequestHeader("Access-Control-Max-Age", "1728000")
+      request.setRequestHeader('X-CSRFToken', csrftoken);
+
+
+      request.onreadystatechange = function () {
+        if (this.readyState === 4) {
+          console.log('Status:', this.status);
+          console.log('Headers:', this.getAllResponseHeaders());
+          console.log('Body:', this.responseText);
+          responseObj = JSON.parse(this.responseText);
+          alert(`New Data Plan ${data_id} Created successfully`)
+          $('#modal_close_new_button').click()
+          window.location.href=`https://yusmodata.tjib.repl.co/admin_dataplan`
+        }
+    };
+
+      var body = {
+        'data_id' : data_id,
+        'network' : network,
+        'plan_type' : plan_type,
+        'amount' : amount,
+        'size' : size,
+        'validity' : validity,
+    };
+
+      request.send(JSON.stringify(body));
+  }
+  function updateDataPlan(){
+    var csrftoken = document.getElementsByName('csrfmiddlewaretoken')[0].value
+      var id = $('#modal-id').val();
+      var data_id = $('#modal-dataid').val();
+      var network = $('#modal-network').val();
+      var plan_type = $('#modal-plantype').val();
+      var amount = $('#modal-amount').val();
+      var size = $('#modal-size').val();
+      var validity = $('#modal-validity').val();
+      console.log(csrftoken,id, data_id, network, plan_type, size, validity);
+      
+    var request = new XMLHttpRequest();
+
+    request.open('PUT', `https://yusmodata.tjib.repl.co/data/${id}/`);
+
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.setRequestHeader('Access-Control-Allow-Origin', "*");
+    request.setRequestHeader('Access-Control-Allow-Methods', 'PUT');
+    request.setRequestHeader("Access-Control-Allow-Headers", "accept, content-type");
+    request.setRequestHeader("Access-Control-Max-Age", "1728000")
+    request.setRequestHeader('X-CSRFToken', csrftoken);
+
+    
+    request.onreadystatechange = function () {
+      if (this.readyState === 4) {
+        console.log('Status:', this.status);
+        console.log('Headers:', this.getAllResponseHeaders());
+        console.log('Body:', this.responseText);
+        responseObj = JSON.parse(this.responseText);
+        alert(`Data Plan ${id} Updated successfully`)
+        $('#modal_close_button').click()
+        window.location.href=`https://yusmodata.tjib.repl.co/admin_dataplan`
+      }
+  };
+
+    var body = {
+      'data_id' : data_id,
+      'network' : network,
+      'plan_type' : plan_type,
+      'amount' : amount,
+      'size' : size,
+      'validity' : validity,
+  };
+
+    request.send(JSON.stringify(body));
+  } 
+  function deleteDataPlan() {
+    var id = $('#modal-id').val();
+    confirmDelete = confirm("Are you sure you want to delete this Data Plan?");
+    if (confirmDelete) {
+      var csrftoken = document.getElementsByName('csrfmiddlewaretoken')[0].value
+      console.log(id)
+      var request = new XMLHttpRequest();
+      request.open('DELETE', `https://yusmodata.tjib.repl.co/data/${id}/`);
+
+        request.setRequestHeader('Content-Type', 'application/json');
+        request.setRequestHeader('Access-Control-Allow-Origin', "*");
+        request.setRequestHeader('Access-Control-Allow-Methods', 'DELETE');
+        request.setRequestHeader("Access-Control-Allow-Headers", "accept, content-type");
+        request.setRequestHeader("Access-Control-Max-Age", "1728000")
+        request.setRequestHeader('X-CSRFToken', csrftoken);
+      
+        request.onreadystatechange = function () {
+          if (this.readyState === 4) {
+            console.log('Status:', this.status);
+            console.log('Headers:', this.getAllResponseHeaders());
+            // responseObj = JSON.parse(this.responseText);
+            alert(`Data Plan ${id} Deleted successfully`)
+            $('#modal_close_button').click()
+            window.location.href=`https://yusmodata.tjib.repl.co/admin_dataplan`
+          }
+      };
+        request.send();
+    }
+    else{
+      alert("Data Plan not deleted")
+      console.log(id)
+    }
+  }
+
+</script>
+{% endblock script %}
+{% endblock content %}

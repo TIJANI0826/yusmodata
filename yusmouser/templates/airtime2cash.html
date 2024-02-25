@@ -1,0 +1,156 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block content %}
+<div class="container fluid">
+  <h3>Airtime To Cash</h3>
+  {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+      <div class="alert {% if message.tags %}alert-{{ message.tags }}"{% endif %}>
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  <div class="card o-hidden border-0 shadow-lg my-5">
+      <div class="card-body p-0">
+        <!-- Nested Row within Card Body -->
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="p-5">
+              <form class="user" method="post">
+                {% csrf_token %}
+                  <div class="form-group">
+                    <select class="form-control" name="data_plan" class="form-control form-control-user" id="data_plan">
+                      <option>Select Network</option>
+                      <option value="5">1.5GB N331</option>
+                      <option value="6">3GB N663</option>
+                      <option value="7">5GB N1104 </option>
+                      <option value="8">2GB N422</option>
+                      <option value="10">750MB N166</option>
+                      <option value="11">1GB N221</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                      <input type="text" class="form-control form-control-user"
+                          id="name_on_card" placeholder="Name of Company" maxlength="65" required name='name_on_card'>
+                  </div>
+                  <div class="form-group">
+                      <input type="number" class="form-control form-control-user"
+                          id="quantity" placeholder="Number of recharge pins(How many Pins do you want to generate)" maxlength="65" required name='quantity'>
+                  </div>
+                  <label for="">To Load Your epin, simply dial *460*6*1# and enter your coupon code (epin or license key)
+</label>
+                 
+                  <button class="btn btn-primary btn-user btn-block">Buy data Coupon/Pin</button>
+                <!-- <a class="btn btn-primary btn-user btn-block">
+                    Login
+                </a> -->
+                <hr>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+  {% block script %}
+    {{ block.super }}
+    <script>
+      $(document).ready(function(){
+        $('#quantity').change(function(){
+          var network = $('#network').find(":selected").val();
+           var network_amount = $('#network_amount').find(":selected").val();
+          console.log(network_amount)
+          var quantity = $(this).val();
+          console.log(quantity)
+          switch(network){
+            case 'MTN':
+              if(network_amount == 100){
+                var amount =  quantity * (network_amount - 2)
+                console.log(amount)
+                $('#amount').val(`${amount}`);
+              }
+              else if(network_amount == 200){
+                  var amount =  quantity * (network_amount - 4)
+                  console.log(amount)
+                  $('#amount').val(`${amount}`);
+                }
+              else if(network_amount == 500){
+                  var amount =  quantity * (network_amount - 10)
+                  console.log(amount)
+                  $('#amount').val(`${amount}`);
+                }
+              else {
+                var amount =  quantity * (network_amount - 20)
+                console.log(amount)
+                $('#amount').val(`${amount}`);
+              }
+            case 'GLO':
+              if(network_amount == 100){
+                    var amount =  quantity * (network_amount - 2.5)
+                    console.log(amount)
+                    $('#amount').val(`${amount}`);
+                  }
+              else if(network_amount == 200){
+                      var amount =  quantity * (network_amount - 5)
+                      console.log(amount)
+                      $('#amount').val(`${amount}`);
+                    }
+              else if(network_amount == 500){
+                      var amount =  quantity * (network_amount - 12.5 )
+                      console.log(amount)
+                      $('#amount').val(`${amount}`);
+                    }
+              else {
+                    var amount =  quantity * (network_amount - 25 )
+                    console.log(amount)
+                    $('#amount').val(`${amount}`);
+              }
+            case '9MOBILE':
+              if(network_amount == 100){
+                    var amount =  quantity * (network_amount - 2)
+                    console.log(amount)
+                    $('#amount').val(`${amount}`);
+                  }
+              else if(network_amount == 200){
+                      var amount =  quantity * (network_amount - 4)
+                      console.log(amount)
+                      $('#amount').val(`${amount}`);
+                    }
+              else if(network_amount == 500){
+                      var amount =  quantity * (network_amount - 10)
+                      console.log(amount)
+                      $('#amount').val(`${amount}`);
+                    }
+              else {
+                    var amount =  quantity * (network_amount - 20)
+                    console.log(amount)
+                    $('#amount').val(`${amount}`);
+              }
+            case 'AIRTEL':
+              if(network_amount == 100){
+                    var amount =  quantity * (network_amount - 3)
+                    console.log(amount)
+                    $('#amount').val(`${amount}`);
+                  }
+              else if(network_amount == 200){
+                      var amount =  quantity * (network_amount - 6)
+                      console.log(amount)
+                      $('#amount').val(`${amount}`);
+                    }
+              else if(network_amount == 500){
+                      var amount =  quantity * (network_amount - 15)
+                      console.log(amount)
+                      $('#amount').val(`${amount}`);
+                    }
+              else {
+                    var amount =  quantity * (network_amount - 30)
+                    console.log(amount)
+                    $('#amount').val(`${amount}`);
+              }
+          }
+        })
+      })
+    </script>
+  {% endblock script %}
+  {% endblock content %}

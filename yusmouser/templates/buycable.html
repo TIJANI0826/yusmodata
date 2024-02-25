@@ -1,0 +1,91 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block content %}
+<div class="container fluid">
+    <h3>Buy Cable</h3>
+      {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+          <div class="alert {% if message.tags %}alert-{{ message.tags }}"{% endif %}>
+            {{ message }}
+          </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+  <div class="card o-hidden border-0 shadow-lg my-5">
+      <div class="card-body p-0">
+        <!-- Nested Row within Card Body -->
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="p-5">
+              <form class="user" method="post">
+                {% csrf_token %}
+                  <div class="form-group">
+                    <select class="form-control" class="form-control form-control-user" id="cableName" placecholder="Cable Name" name="cable" onchange="changePlan()">
+                      <!-- <option value=''>select cable Name</option> -->
+                    </select>
+                  </div>
+
+                <div class="form-group">
+                  <select class="form-control" class="form-control form-control-user" id="cablePlan" placecholder="Cable Plan" name="cableplan" onchange="planAmount()">
+                    <option value=''>select cable id</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-user"
+                        id="amount" placeholder="Amount" maxlength="65" required name='amount' readonly="readonly">
+                </div>
+                
+                <div class="form-group">
+                    <input type="tel" class="form-control form-control-user"
+                        id="mobile" placeholder="Mobile Number" maxlength="65" required name='mobile'>
+                </div>
+
+                <div class="form-group">
+                    <input type="number" class="form-control form-control-user"
+                        id="smartcardnumber" placeholder="Smart Card Number/IUC Number" maxlength="65" required name='smartcardnumber'>
+                </div>
+                <span id="iuc_name"></span>
+
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-user"
+                        id="customerName" placeholder="cable Name" maxlength="65" required name='customername' disabled="">
+                </div>
+                
+                <button class="btn btn-primary btn-user btn-block">Buy Cable</button>
+                <!-- <a class="btn btn-primary btn-user btn-block">
+                    Login
+                </a> -->
+                <hr>
+            </form>
+          </div>
+        </div>
+      </div>
+  </div>
+{% block script %}
+    {{ block.super }}
+    <script src="{% static 'js/buycable.js' %}"></script>
+    <script>
+      $(document).ready(function(){
+        $("#smartcardnumber").on("change", function() {
+        $.ajax({
+          url: "/uic_number",
+          type: "GET", //send it through get method
+          dataType: "json",
+          data: { 
+            smartcard: $(this).val(), 
+            cable_name: $("#cableName option:selected").text(), 
+          },
+          success: (data) => {
+            new_data = JSON.parse(data)
+            $("#customerName").val(`${new_data["name"]}`)
+          },
+           error: (error) => {
+             console.log(error);
+           }
+        })
+      })
+      })
+    </script>
+{% endblock script %}
+{% endblock content %}

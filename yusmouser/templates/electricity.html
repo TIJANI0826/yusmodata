@@ -1,0 +1,91 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block content %}
+<div class="container fluid">
+    <h3>Buy Electricity</h3>
+      {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+          <div class="alert {% if message.tags %}alert-{{ message.tags }}"{% endif %}>
+            {{ message }}
+          </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+  <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+              <!-- Nested Row within Card Body -->
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="p-5">
+                    <form class="user" method="post">
+                    {% csrf_token %}
+                    
+                      <div class="form-group">
+                        <div class="form-group">
+                          <select class="form-control" class="form-control form-control-user" id="discoSelect" placecholder="Select Your Disco" name="disco" required>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <select class="form-control" class="form-control form-control-user" id="plan_type" placecholder="Meter Type" name="metertype" required>
+                          <option value="">Select your meter type</option>
+                          <option value="Prepaid">Prepaid</option>
+                          <option value="Postpaid">Postpaid</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" class="form-control" class="form-control form-control-user" name="meternumber" id='meter_number' placeholder="Enter Meter Number" required>
+                      </div>
+                    <div class="form-control" class="form-control form-control-user">
+                      <span id='meterauth'>
+                        
+                      </span>
+                    </div>
+                    <div class="form-group">
+                      <input type="number" class="form-control" class="form-control form-control-user" name="mobile" placeholder="Enter Your Phone Number" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" name="amount" class="form-control" class="form-control form-control-user" id="amount_input" placeholder="Amount" required>
+                    </div>
+                    <div class="form-group">
+                      <button class="btn btn-primary btn-user btn-block">Buy Electricity</button>
+                    </div>
+                      <!-- <a class="btn btn-primary btn-user btn-block">
+                          Login
+                      </a> -->
+                      <hr>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+</div>
+{% block script %}
+  {{ block.super }}
+  <script src="{% static 'js/buyelectricity.js' %}"></script>
+  <script>
+     $("#meter_number").on("change", function() {
+        $.ajax({
+          url: "/get_meter",
+          type: "GET", //send it through get method
+          dataType: "json",
+          data: { 
+           
+            meterNumber :$(this).val(),
+            disco_name : $("#discoSelect option:selected").val(),
+            metertypeid  : $("#plan_type option:selected").text()
+          },
+          success: (data) => {
+            new_data = JSON.parse(data)
+            $("#meterauth").html(`${new_data["name"]}<i class="fa-solid fa-check"></i>`)
+          },
+           error: (error) => {
+             console.log(error);
+           }
+        })
+      })
+  </script>
+{% endblock script %}
+{% endblock content %}

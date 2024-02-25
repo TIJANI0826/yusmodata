@@ -1,0 +1,71 @@
+console.log(transactionCompleted)
+               console.log(transactionCanceled)
+                 $.ajax({
+                          url: `https://api.monnify.com/api/v2/transactions/${transactionCompleted['transactionReference']}`,
+                          type: "GET",
+                          dataType: "json",
+                          contentType : 'application/json',
+                          headers: {
+                            "Accept": "application/json",
+                            "Authorization": "Bearer {{ access_token }}",
+                          },
+                          success: (data) => {
+                            paymentStatus = data['responseBody']['paymentStatus']
+                            transferReference = data['responseBody']['transactionReference']
+                          },
+                          error: (error) => {
+                            console.log(error);
+                          }
+                        });
+                if(paymentStatus == "PAID"){
+                        $.ajax({
+                          url: 'fund_wallet2',
+                          type: "POST",
+                          dataType: "json",
+                          data: JSON.stringify({payload: amount }),
+                          headers: {
+                            "X-Requested-With": "XMLHttpRequest",
+                            "X-CSRFToken": getCookie("csrftoken"),  // don't forget to include the 'getCookie' function
+                          },
+                          success: (data) => {
+                            alert(`Wallet funded succesfully with ${amount} Naira`);
+                             window.location.href='/';
+    
+                          },
+                          error: (error) => {
+                            console.log(error);
+                          }
+                        });
+                      }
+        $(document).ready(function() {
+             $('#btnSubmit').click(function() {
+                
+                MonnifySDK.initialize({
+                    amount: document.getElementById("amount").value,
+                    currency: "NGN",
+                    reference: new String((new Date()).getTime()),
+                    customerFullName: "{{ customerFullName }}",
+                    customerEmail: "{{ customer_email }}",
+                    apiKey: "MK_PROD_4RS9EEK7XF",
+                    contractCode: "272745166491",
+                    paymentDescription: "Yusmo " + "{{ customerFullName }}" ,
+                    onLoadStart: () => {
+                        console.log("loading has started");
+                    },
+                    onLoadComplete: () => {
+                        console.log("SDK is UP");
+                    },
+    
+                    onComplete: function(response) {
+                        //Implement what happens when the transaction is completed.          
+                      console.log(response);
+
+                    },
+                    onClose: function(data) {
+                        //Implement what should happen when the modal is closed here
+                        console.log(data);
+                    }
+                });
+               
+             });
+         });
