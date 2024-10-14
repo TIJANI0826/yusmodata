@@ -2,9 +2,10 @@ import requests
 import json
 import os
 
-HUSMODATA_TOKEN = "5880b91337684eb36e97f1b67be852b9bcec9d85"
+HUSMODATA_TOKEN = "e97a70d6c8aa7a74728c46507b716e4337923c1e"
 
-BASE_URL = 'https://www.husmodataapi.com/api'
+BASE_URL = 'https://www.husmodata.com/api'
+
 def buyAirtimeVTU(network_id, amount, mobile_number, airtime_type):
     url = f"{BASE_URL}/topup/"
 
@@ -154,7 +155,7 @@ def validateIUC(smart_card,cable_company):
 }
   response = requests.request("GET", url, headers=headers, data=payload)
   return response.json()
-  
+
 def validateMeterNumber(meter_number, disco_name, meter_type_id):
     url = f"{BASE_URL}/validatemeter?meternumber={meter_number}&disconame={disco_name}&mtype={meter_type_id}"
 

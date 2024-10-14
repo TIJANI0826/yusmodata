@@ -48,7 +48,7 @@ if SECRET_KEY is None:
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'yusmodata--tjib.repl.co', 'yusmodata.tjib.repl.co', '10.20.0.206','127.0.0.1'
+    'yusmodata--tjib.repl.co', 'yusmodata.tjib.repl.co', '10.20.0.206','127.0.0.1', 'ibtj.pythonanywhere.com'
 ]
 X_FRAME_OPTIONS = '*'
 
@@ -80,7 +80,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
        'rest_framework.permissions.AllowAny',
     ],
-    'DEFAULT_PAGINATION_CLASS': 
+    'DEFAULT_PAGINATION_CLASS':
     'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
 }

@@ -27,48 +27,48 @@ def homepage(request):
     user_id = request.user.id
     customer = Customer.objects.get(customer=user_id)
     accountReference = Customer.objects.get(customer=user_id).accountReference
-    customersTransaction = get_all_transaction(
-        account_reference=accountReference)
-    for transaction in customersTransaction:
-        referencExist = MonnifyTransaction.objects.filter(
-            transactionRefrence=transaction['transactionReference'])
-        if not referencExist:
-            # customer = Customer.objects.get(
-            #     customer_email=transaction['customerDTO']['email'])
-            monnifyTransact = MonnifyTransaction(
-                customer=customer,
-                transactionRefrence=transaction['transactionReference'],
-                paymentReference=transaction['paymentReference'],
-                amountPaid=transaction['amountPaid'],
-                totalPayable=transaction['amountPaid'],
-                paidOn=transaction['completedOn'],
-                paymentStatus=transaction['paymentStatus'],
-                paymentDescription=transaction['paymentDescription'],
-                currency='NGN',
-                paymentMethod=transaction['paymentMethod'])
-            monnifyTransact.save()
-            customer.customer_wallet_balance += Decimal(
-                int(transaction['amountPaid']))
-            customer.save()
+    # customersTransaction = get_all_transaction(
+    #     account_reference=accountReference)
+    # for transaction in customersTransaction:
+    #     referencExist = MonnifyTransaction.objects.filter(
+    #         transactionRefrence=transaction['transactionReference'])
+    #     if not referencExist:
+    #         # customer = Customer.objects.get(
+    #         #     customer_email=transaction['customerDTO']['email'])
+    #         monnifyTransact = MonnifyTransaction(
+    #             customer=customer,
+    #             transactionRefrence=transaction['transactionReference'],
+    #             paymentReference=transaction['paymentReference'],
+    #             amountPaid=transaction['amountPaid'],
+    #             totalPayable=transaction['amountPaid'],
+    #             paidOn=transaction['completedOn'],
+    #             paymentStatus=transaction['paymentStatus'],
+    #             paymentDescription=transaction['paymentDescription'],
+    #             currency='NGN',
+    #             paymentMethod=transaction['paymentMethod'])
+    #         monnifyTransact.save()
+    #         customer.customer_wallet_balance += Decimal(
+    #             int(transaction['amountPaid']))
+    #         customer.save()
     wallet_balance = Customer.objects.get(
         customer=user_id).customer_wallet_balance
-    g = get_account_details(accountReference)
-    accountName = ""
-    accounts = []
-    for key, value in g['responseBody'].items():
-        if key == "accountName":
-            accountName = value
-        if key == "accounts":
-            for item in value:
-                accounts.append([
-                    item['bankName'], item['accountNumber'],
-                    item['accountName']
-                ])
+    # g = get_account_details(accountReference)
+    # accountName = ""
+    # accounts = []
+    # for key, value in g['responseBody'].items():
+    #     if key == "accountName":
+    #         accountName = value
+    #     if key == "accounts":
+    #         for item in value:
+    #             accounts.append([
+    #                 item['bankName'], item['accountNumber'],
+    #                 item['accountName']
+    #             ])
 
     return render(
         request, "home.html", {
-            "accountName": accountName,
-            "accounts": accounts,
+            # "accountName": accountName,
+            # "accounts": accounts,
             "wallet_balance": wallet_balance
         })
 
@@ -129,7 +129,7 @@ def sign_in(request):
                     if user.is_staff:
                       return redirect('yusmouser:yusmo_admin_dashboard')
                     else:
-                      return redirect('yusmouser:homepage') 
+                      return redirect('yusmouser:homepage')
     form = LoginForm()
     return render(request, 'registration/login.html', {'form': form})
 
@@ -145,7 +145,7 @@ def buydata(request):
     user_id = request.user.id
     wallet_balance = Customer.objects.get(
         customer=user_id).customer_wallet_balance
-    access_token = get_access_token()
+    # access_token = get_access_token()
     if request.method == "POST":
         mobile_number = request.POST['mobile_number']
         network = request.POST['network']
@@ -174,7 +174,7 @@ def buydata(request):
             print(dataResponse, file=f)
         if dataResponse.status_code != 200:
             error2 = dataResponse
-            
+
             messages.error(request,
                            f'{mobile_number} {network} {plan_id} {error2}')
             return render(request, "buydata.html",
@@ -243,7 +243,7 @@ def buyairtime(request):
             return render(request, "buyairtime.html",
                           {"wallet_balance": wallet_balance})
         airtimeData = buyAirtimeVTU(network_id, amount, mobile, airtimetype)
-       
+
         if airtimeData['Status'] != "successful":
             error1 = airtimeData
             messages.error(
@@ -251,7 +251,7 @@ def buyairtime(request):
             return render(request, "buyairtime.html",
                           {"wallet_balance": wallet_balance})
         else:
-            
+
             c = AirtimeTransaction(
                 customer=request.user,
                 transaction_id=airtimeData['id'],
@@ -268,7 +268,7 @@ def buyairtime(request):
             c.save()
             customer = Customer.objects.get(customer=user_id)
             plan_amount = Decimal(airtimeData['paid_amount']) + Decimal(1)
-            
+
             new_cleaned_amount = plan_amount.quantize(Decimal('.01'), rounding=ROUND_DOWN)
             new_customer_wallet_balance = customer.customer_wallet_balance - new_cleaned_amount
             # customer.save(update_fields=["customer_wallet_balance"])
@@ -303,7 +303,7 @@ def result_checker(request):
         resultCheckerResponse = buyResultChecker(exam_name, quantity)
         if resultCheckerResponse.status_code != 200:
             error1 = resultCheckerResponse
-            
+
             messages.error(request, f'{exam_name} {quantity} {amount} {error1}')
             return render(request, "resultChecker.html",
                           {"wallet_balance": wallet_balance})
@@ -367,7 +367,7 @@ def print_recharge_card(request):
             print(rechargePinResponse.text, file=f)
         if rechargePinResponse.status_code != 200:
             error1 = rechargePinResponse
-            
+
             messages.error(
                 request,
                 f'{network} {network_amount} {quantity} {amount} {error1}')
@@ -425,7 +425,7 @@ def mtn_data_pin(request):
             print(mtnDataPinResponse.text, file=f)
         if mtnDataPinResponse.status_code != 200:
             error1 = mtnDataPinResponse
-            
+
             messages.error(request, f'{data_plan} {quantity} {amount} {error1}')
             return render(request, "mtnGiftingCoupon.html",
                           {"wallet_balance": wallet_balance})
@@ -558,7 +558,7 @@ def airtime_transanction(request):
 
     return render(request, 'airtime-transaction.html',
                   {"customersTransaction": customersTransaction})
-  
+
 @login_required()
 def wallet_finding(request):
   username1 = request.user.username
@@ -678,7 +678,7 @@ def get_uic_number(request):
             smart_card = request.GET.get('smartcard')
             cable_name = request.GET.get('cable_name')
             iuc_validate_response = validateIUC(smart_card, cable_name)
-            
+
             return JsonResponse(iuc_validate_response.text, safe=False)
 
 
