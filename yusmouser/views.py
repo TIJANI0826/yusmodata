@@ -17,9 +17,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from .apis.monnify_api import create_reserverd_account, get_account_details, get_access_token, get_transaction_status, get_all_transaction, MONNIFY_CONTRACT_CODE, MONNIFY_WALLET_ACCOUNT_NUMBER, MONNIFY_BASE_URL, MONNIFY_SECRET_KEY,MONNIFY_API_KEY
-from .apis.husmodata_api import buyAirtimeVTU, buyData, buyElectricityBill, cableSub, getAllDataTransaction, queryDataTransaction, queryAirtimeTransaction, queryBillTransaction, queryCableTransaction, validateIUC, validateMeterNumber, buyResultChecker, generateRechargeCard, buyMTNGiftingCoupon,HUSMODATA_TOKEN
+from .apis.husmodata_api import buyAirtimeVTU, buyData, buyElectricityBill, cableSub, getAllDataTransaction, queryDataTransaction, queryAirtimeTransaction, queryBillTransaction, queryCableTransaction, validateIUC, validateMeterNumber, buyResultChecker, generateRechargeCard, buyMTNGiftingCoupon
 import datetime
 from .models import Customer, DataTransaction, AirtimeTransaction, MonnifyTransaction
+from django.conf import settings
 
 
 @login_required()
@@ -489,7 +490,7 @@ def buycable(request):
     user_id = request.user.id
     wallet_balance = Customer.objects.get(
         customer=user_id).customer_wallet_balance
-    access_token = HUSMODATA_TOKEN
+    access_token = settings.HUSMODATA_TOKEN
     if request.method == "POST":
         cableName = request.POST['cable']
         cableplan = request.POST['cableplan']

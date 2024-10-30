@@ -32,8 +32,10 @@ PAYSTACK_LIVE_PUBLIC_KEY = "pk_live_402c3cd3b991e90143c31bcd119f214e49b53280"
 PAYSTACK_LIVE_SECRET_KEY = "sk_live_ed5adf0fef92b2067a3ad76255ce5c1a51f7c6a4"
 PAYSTACK_TEST_SECRET_KEY = "sk_test_a6be918bcf48bb742c66a133101a8eee69032999"
 PAYSTACK_TEST_PUBLIC_KEY = "pk_test_8cb6f341a2e78d65c6cbf23b05f253ef0c53f1e3"
-HUSMODATA_API_TEST_TOKEN = "66f2e5c39ac8640f13cd888f161385b12f7e5e92"
-HUSMODATA_API_KEY = "5880b91337684eb36e97f1b67be852b9bcec9d85"
+HUSMODATA_API_TEST_TOKEN = "e97a70d6c8aa7a74728c46507b716e4337923c1e"
+HUSMODATA_API_KEY = "e97a70d6c8aa7a74728c46507b716e4337923c1e"
+HUSMODATA_BASE_URL = 'https://www.husmodata.com/api'
+
 
 SECRET_KEY = "W5d_aUr15rSIdi72hc78mIad6KVRqQ4sVovfJkLOzqs"
 # SECRET_KEY = os.getenv('tj_secrets')
@@ -45,10 +47,10 @@ if SECRET_KEY is None:
     exit(1)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
-    'yusmodata--tjib.repl.co', 'yusmodata.tjib.repl.co', '10.20.0.206','127.0.0.1', 'ibtj.pythonanywhere.com'
+   'yusmodata.tjib.repl.co', '10.20.0.206','127.0.0.1', 'ibtj.pythonanywhere.com'
 ]
 X_FRAME_OPTIONS = '*'
 
@@ -222,5 +224,5 @@ EMAIL_USE_SSL = False
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # APPEND_SLASH = False
 CSRF_TRUSTED_ORIGINS = [
-    'yusmodata--tjib.repl.co', 'https://yusmodata.tjib.repl.co/','yusmodata.tjib.repl.co', '127.0.0.1'
+   'https://yusmodata.tjib.repl.co/', '127.0.0.1', 'https://ibtj.pythonanywhere.com/'
 ]

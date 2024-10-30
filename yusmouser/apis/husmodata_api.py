@@ -1,13 +1,12 @@
 import requests
 import json
 import os
+from django.conf import settings
 
-HUSMODATA_TOKEN = "e97a70d6c8aa7a74728c46507b716e4337923c1e"
 
-BASE_URL = 'https://www.husmodata.com/api'
 
 def buyAirtimeVTU(network_id, amount, mobile_number, airtime_type):
-    url = f"{BASE_URL}/topup/"
+    url = settings.HUSMODATA_BASE_URL+"/topup/"
 
     payload = json.dumps({
         "network": network_id,
@@ -17,18 +16,26 @@ def buyAirtimeVTU(network_id, amount, mobile_number, airtime_type):
         "airtime_type": airtime_type
     })
     headers = {
-        'Authorization': 'Token {}'.format(HUSMODATA_TOKEN),
+        'Authorization': f'Token {settings.HUSMODATA_TOKEN}',
         'Content-Type': 'application/json'
     }
 
-    response = requests.request("POST", url, headers=headers, data=payload)
+    try:
+        response = requests.post(url, headers=headers, data=payload, timeout=10)
+        response.raise_for_status()  # Check for HTTP errors
+        data = response.json()  # Parse JSON response
+        return data
 
-    return response.json()
+    except requests.exceptions.HTTPError as http_err:
+        print(f"HTTP error occurred: {http_err}")
+    except requests.exceptions.RequestException as err:
+        print(f"Error occurred: {err}")
 
+    return None
 
 def buyData(network_id, mobile_number, plan_id):
 
-    url = f"{BASE_URL}/data/"
+    url = settings.HUSMODATA_BASE_URL+"/data/"
 
     payload = json.dumps({
         "network": network_id,
@@ -37,16 +44,25 @@ def buyData(network_id, mobile_number, plan_id):
         "Ported_number": 'false'
     })
     headers = {
-        'Authorization': 'Token {}'.format(HUSMODATA_TOKEN),
+        'Authorization': f'Token {HUSMODATA_TOKEN}',
         'Content-Type': 'application/json'
     }
 
-    response = requests.request("POST", url, headers=headers, data=payload)
-    return response.json()
+    try:
+        response = requests.post(url, headers=headers, data=payload, timeout=10)
+        response.raise_for_status()  # Check for HTTP errors
+        data = response.json()  # Parse JSON response
+        return data
 
+    except requests.exceptions.HTTPError as http_err:
+        print(f"HTTP error occurred: {http_err}")
+    except requests.exceptions.RequestException as err:
+        print(f"Error occurred: {err}")
+
+    return None
 
 def buyElectricityBill(disco, amount, meter_number, meter_type_id):
-    url = f"{BASE_URL}/billpayment/"
+    url = f"{settings.HUSMODATA_BASE_URL}/billpayment/"
 
     payload = json.dumps({
         "disco_name": disco,
@@ -56,17 +72,17 @@ def buyElectricityBill(disco, amount, meter_number, meter_type_id):
     })
 
     headers = {
-        'Authorization': 'Token {}'.format(HUSMODATA_TOKEN),
+        'Authorization': f'Token {settings.HUSMODATA_BASE_URL}',
         'Content-Type': 'application/json'
     }
 
     response = requests.request("POST", url, headers=headers, data=payload)
 
-    return response.json()
+    return response
 
 
 def cableSub(cablename, cableplan_id, smart_card_number):
-    url = f"{BASE_URL}/cablesub/"
+    url = f"{settings.HUSMODATA_BASE_URL}/cablesub/"
 
     payload = json.dumps({
         "cablename": cablename,
@@ -75,7 +91,7 @@ def cableSub(cablename, cableplan_id, smart_card_number):
     })
 
     headers = {
-        'Authorization': 'Token {}'.format(HUSMODATA_TOKEN),
+        'Authorization': f'Token {settings.HUSMODATA_BASE_URL}',
         'Content-Type': 'application/json'
     }
 
@@ -85,21 +101,21 @@ def cableSub(cablename, cableplan_id, smart_card_number):
 
 
 def getAllDataTransaction():
-    url = f"{BASE_URL}/data/"
+    url = f"{settings.HUSMODATA_BASE_URL}/data/"
 
     payload = ""
-    headers = {'Authorization': 'Token {}'.format(HUSMODATA_TOKEN), '': ''}
+    headers = {'Authorization': f'Token {settings.HUSMODATA_BASE_URL}', '': ''}
 
     response = requests.request("GET", url, headers=headers, data=payload)
     return response.json()
 
 
 def queryDataTransaction(id):
-    url = f"{BASE_URL}/data/"
+    url = f"{settings.HUSMODATA_BASE_URL}/data/"
 
     payload = json.dumps({"id": id})
     headers = {
-        'Authorization': 'Token {}'.format(HUSMODATA_TOKEN),
+        'Authorization': f'Token {settings.HUSMODATA_BASE_URL}',
     }
 
     response = requests.request("GET", url, headers=headers, data=payload)
@@ -108,11 +124,11 @@ def queryDataTransaction(id):
 
 
 def queryAirtimeTransaction(id):
-    url = f"{BASE_URL}/data"
+    url = f"{settings.HUSMODATA_BASE_URL}/data"
 
     payload = ""
     headers = {
-        'Authorization': 'Token {}'.format(HUSMODATA_TOKEN),
+        'Authorization': f'Token {settings.HUSMODATA_BASE_URL}',
         'Content-Type': 'application/json'
     }
 
@@ -122,10 +138,10 @@ def queryAirtimeTransaction(id):
 
 
 def queryBillTransaction(id):
-    url = f"{BASE_URL}/billpayment/{id}"
+    url = f"{settings.HUSMODATA_BASE_URL}/billpayment/{id}"
 
     payload = ""
-    headers = {'Authorization': 'Token {}'.format(HUSMODATA_TOKEN)}
+    headers = {'Authorization': 'Token {settings.HUSMODATA_BASE_URL}'}
 
     response = requests.request("GET", url, headers=headers, data=payload)
 
@@ -133,11 +149,11 @@ def queryBillTransaction(id):
 
 
 def queryCableTransaction():
-    url = f"{BASE_URL}/cablesub/id"
+    url = f"{settings.HUSMODATA_BASE_URL}/cablesub/id"
 
     payload = ""
     headers = {
-        'Authorization': 'Token {}'.format(HUSMODATA_TOKEN),
+        'Authorization': f'Token {settings.HUSMODATA_BASE_URL}',
         'Content-Type': 'application/json'
     }
 
@@ -147,21 +163,21 @@ def queryCableTransaction():
 
 
 def validateIUC(smart_card,cable_company):
-  url = f"{BASE_URL}/validateiuc?smart_card_number={smart_card}&cablename={cable_company}"
+  url = f"{settings.HUSMODATA_BASE_URL}/validateiuc?smart_card_number={smart_card}&cablename={cable_company}"
   payload = ""
   headers = {
-  'Authorization': 'Token {}'.format(HUSMODATA_TOKEN),
+  'Authorization': f'Token {settings.HUSMODATA_BASE_URL}',
   'Content-Type': 'application/json'
 }
   response = requests.request("GET", url, headers=headers, data=payload)
   return response.json()
 
 def validateMeterNumber(meter_number, disco_name, meter_type_id):
-    url = f"{BASE_URL}/validatemeter?meternumber={meter_number}&disconame={disco_name}&mtype={meter_type_id}"
+    url = f"{settings.HUSMODATA_BASE_URL}/validatemeter?meternumber={meter_number}&disconame={disco_name}&mtype={meter_type_id}"
 
     payload = ""
     headers = {
-        'Authorization': 'Token {}'.format(HUSMODATA_TOKEN),
+        'Authorization': f'Token {settings.HUSMODATA_BASE_URL}',
         'Content-Type': 'application/json'
     }
 
@@ -171,7 +187,7 @@ def validateMeterNumber(meter_number, disco_name, meter_type_id):
 
 def buyMTNGiftingCoupon(data_plan,quantity,name_on_card):
 
-  url = f"{BASE_URL}/datarechargepin/"
+  url = f"{settings.HUSMODATA_BASE_URL}/datarechargepin/"
 
   payload = json.dumps({
       "data_plan": data_plan,
@@ -181,7 +197,7 @@ def buyMTNGiftingCoupon(data_plan,quantity,name_on_card):
 
   # payload = "{\r\n    \"data_plan\": \"\",\r\n    \"quantity\": \"1\",\r\n    \"name_on_card\": \"\"\r\n}"
   headers = {
-    'Authorization': 'Token {}'.format(HUSMODATA_TOKEN),
+    'Authorization': f'Token {settings.HUSMODATA_BASE_URL}',
     'Content-Type': 'application/json'
   }
 
@@ -190,7 +206,7 @@ def buyMTNGiftingCoupon(data_plan,quantity,name_on_card):
   return response.json()
 def buyResultChecker(exam_name,quantity):
 
-  url = f"{BASE_URL}/epin/"
+  url = f"{settings.HUSMODATA_BASE_URL}/epin/"
 
   payload = json.dumps({
       "exam_name": exam_name,
@@ -198,7 +214,7 @@ def buyResultChecker(exam_name,quantity):
   })
 
   headers = {
-    'Authorization': 'Token {}'.format(HUSMODATA_TOKEN),
+    'Authorization': f'Token {settings.HUSMODATA_BASE_URL}',
     'Content-Type': 'application/json'
   }
 
@@ -207,7 +223,7 @@ def buyResultChecker(exam_name,quantity):
   return response.json()
 def generateRechargeCard(network,network_amount,quantity,name_on_card):
 
-  url = f"{BASE_URL}/rechargepin/"
+  url = f"{settings.HUSMODATA_BASE_URL}/rechargepin/"
   payload =json.dumps({
                          "network": network,
                          "network_amount": network_amount,
@@ -215,7 +231,7 @@ def generateRechargeCard(network,network_amount,quantity,name_on_card):
                          "name_on_card":name_on_card
   })
   headers = {
-    'Authorization': 'Token {}'.format(HUSMODATA_TOKEN),
+    'Authorization': f'Token {settings.HUSMODATA_BASE_URL}',
     'Content-Type': 'application/json'
   }
   response = requests.request("POST", url, headers=headers, data=payload)
@@ -224,7 +240,7 @@ def generateRechargeCard(network,network_amount,quantity,name_on_card):
 def airtime_to_cash(network,mobile_number,amount):
   import requests
 
-  url = f"{BASE_URL}/Airtime_funding/"
+  url = f"{settings.HUSMODATA_BASE_URL}/Airtime_funding/"
   payload =json.dumps({
                          "network": network,
                          "mobile_number": mobile_number,
